@@ -8,7 +8,7 @@
         "start": "next start",
         "lint": "eslint",
         "format": "prettier --check .",
-        "format:apply": "prettier --write .",
+        "format:fix": "prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {

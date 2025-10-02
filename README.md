@@ -57,7 +57,7 @@ npm run build      # Build de producción
 npm run start      # Servidor de producción
 npm run lint       # Linter ESLint
 npm run format     # Revisar formato con Prettier
-npm run format:apply # Aplicar formato con Prettier
+npm run format:fix # Aplicar formato con Prettier
 ```
 
 ## 🤝 Cómo Contribuir
