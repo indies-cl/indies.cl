@@ -1,0 +1,113 @@
+name: CI/CD Pipeline
+
+on:
+    pull_request:
+        branches: [main, develop]
+
+jobs:
+    # Quality Checks Job
+    quality-checks:
+        name: Quality Checks
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [18.x, 20.x]
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Type checking
+              run: npx tsc --noEmit
+
+            - name: Lint check
+              run: npm run lint
+
+            - name: Format check
+              run: npm run format
+
+            - name: Build check
+              run: npm run build
+    security-audit:
+        name: Security Audit
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run security audit
+              run: npm audit --audit-level moderate
+
+            - name: Check for outdated dependencies
+              run: npm outdated || true
+    pr-quality-gate:
+        name: PR Quality Gate
+        runs-on: ubuntu-latest
+        if: github.event_name == 'pull_request'
+        needs: [quality-checks, security-audit]
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Generate build report
+              run: |
+                  echo "## 🚀 Build Report" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ Linting passed" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ Formatting is correct" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ TypeScript compilation successful" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ Build completed successfully" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ Security audit passed" >> $GITHUB_STEP_SUMMARY
+
+            - name: Comment PR
+              uses: actions/github-script@v7
+              if: github.event_name == 'pull_request'
+              with:
+                  script: |
+                      github.rest.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: `## 🎉 Quality Checks Passed!
+                        
+                        Your PR has successfully passed all quality gates:
+                        
+                        ✅ **Linting** - Code follows project standards
+                        ✅ **Formatting** - Code is properly formatted  
+                        ✅ **Type Checking** - TypeScript compilation successful
+                        ✅ **Build** - Application builds without errors
+                        ✅ **Security** - Dependencies are secure
+                        
+                        Ready for review! 🚀`
+                      })
