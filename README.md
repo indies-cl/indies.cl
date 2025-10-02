@@ -68,9 +68,9 @@ npm run format:fix # Aplicar formato con Prettier
 
 1. **clona** este repositorio
 2. Crea una **branch** siguiendo nuestro modelo Git Flow:
-    - `feature/nombre-feature` para nuevas características
-    - `bugfix/nombre-bug` para corrección de errores
-    - `hotfix/nombre-hotfix` para correcciones urgentes
+   - `feature/nombre-feature` para nuevas características
+   - `bugfix/nombre-bug` para corrección de errores
+   - `hotfix/nombre-hotfix` para correcciones urgentes
 3. Realiza tus cambios
 4. Asegúrate de que el código pase los tests y linting
 5. Crea un **Pull Request** vinculado a un ticket del proyecto "Landing v1"
