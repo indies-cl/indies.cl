@@ -16,9 +16,7 @@ const eslintConfig = [
     ],
     plugins: ['prettier', 'jsx-a11y'],
     rules: {
-      'prettier/prettier': [
-        'error',
-      ],
+      'prettier/prettier': ['error'],
       'react/react-in-jsx-scope': 'off',
       'jsx-a11y/alt-text': 'warn',
       'jsx-a11y/aria-props': 'warn',
