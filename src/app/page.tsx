@@ -1,7 +1,7 @@
 export default function Home() {
-    return (
-        <div className="flex min-h-screen flex-col items-center justify-center p-24">
-            <h1>Indies</h1>
-        </div>
-    )
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center p-24">
+      <h1>Indies</h1>
+    </div>
+  );
 }
