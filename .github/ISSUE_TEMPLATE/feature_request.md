@@ -1,9 +1,9 @@
 ---
 name: 🚀 Feature Request
 about: Suggest a new feature for Indies.cl
-title: "[FEATURE] "
-labels: ["enhancement", "landing-v1"]
-assignees: ""
+title: '[FEATURE] '
+labels: ['enhancement']
+assignees: ''
 ---
 
 ## 📝 Descripción

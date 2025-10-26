@@ -1,9 +1,9 @@
 ---
 name: 🐛 Bug Report
 about: Report a bug in Indies.cl
-title: "[BUG] "
-labels: ["bug", "landing-v1"]
-assignees: ""
+title: '[BUG] '
+labels: ['bug', 'landing-v1']
+assignees: ''
 ---
 
 ## 🐛 Descripción del Bug
