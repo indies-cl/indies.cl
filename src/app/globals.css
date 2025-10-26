@@ -1,80 +1,80 @@
 @import 'tailwindcss';
 
 @font-face {
-    font-family: "Atkinson Hyperlegible";
-    src: url("/fonts/AtkinsonHyperlegible-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fonts/AtkinsonHyperlegible-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: "Atkinson Hyperlegible";
-    src: url("/fonts/AtkinsonHyperlegible-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fonts/AtkinsonHyperlegible-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: "Atkinson Hyperlegible";
-    src: url("/fonts/AtkinsonHyperlegible-Italic.ttf") format("truetype");
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fonts/AtkinsonHyperlegible-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: "Atkinson Hyperlegible";
-    src: url("/fonts/AtkinsonHyperlegible-BoldItalic.ttf") format("truetype");
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fonts/AtkinsonHyperlegible-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
 }
 
 :root {
-    --branding-orange-600: #f02e06ff;
-    --branding-orange-500: #ff4f18ff;
-    --branding-orange-400: #ff6f37ff;
-    --neutral-1000: #141517ff;
-    --neutral-900: #393b40ff;
-    --neutral-800: #414449ff;
-    --neutral-700: #494d55ff;
-    --neutral-600: #555c65ff;
-    --neutral-300: #aab0b6ff;
-    --neutral-100: #f2f4f7ff;
-    --accent-red-700: #c10801ff;
-    --base-white: #ffffffff;
-    --base-black: #000000ff;
-    --typography-font-weight-regular: Regular;
-    --typography-font-weight-medium: Medium;
-    --typography-family-family-body: Atkinson Hyperlegible;
-    --typography-family-Family-caption: Atkinson Hyperlegible Mono;
+  --branding-orange-600: #f02e06ff;
+  --branding-orange-500: #ff4f18ff;
+  --branding-orange-400: #ff6f37ff;
+  --neutral-1000: #141517ff;
+  --neutral-900: #393b40ff;
+  --neutral-800: #414449ff;
+  --neutral-700: #494d55ff;
+  --neutral-600: #555c65ff;
+  --neutral-300: #aab0b6ff;
+  --neutral-100: #f2f4f7ff;
+  --accent-red-700: #c10801ff;
+  --base-white: #ffffffff;
+  --base-black: #000000ff;
+  --typography-font-weight-regular: Regular;
+  --typography-font-weight-medium: Medium;
+  --typography-family-family-body: Atkinson Hyperlegible;
+  --typography-family-Family-caption: Atkinson Hyperlegible Mono;
 }
 
 @theme {
-    --color-background: var(--neutral-1000);
-    --color-foreground: var(--neutral-100);
-    --color-neutral-1000: var(--neutral-1000);
-    --color-neutral-900: var(--neutral-900);
-    --color-neutral-800: var(--neutral-800);
-    --color-neutral-700: var(--neutral-700);
-    --color-neutral-600: var(--neutral-600);
-    --color-neutral-300: var(--neutral-300);
-    --color-neutral-100: var(--neutral-100);
-    --color-branding-600: var(--branding-orange-600);
-    --color-branding-500: var(--branding-orange-500);
-    --color-branding-400: var(--branding-orange-400);
-    --color-accent-red-700: var(--accent-red-700);
-    --color-dark: var(--base-black);
-    --color-white: var(--base-white);
+  --color-background: var(--neutral-1000);
+  --color-foreground: var(--neutral-100);
+  --color-neutral-1000: var(--neutral-1000);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-100: var(--neutral-100);
+  --color-branding-600: var(--branding-orange-600);
+  --color-branding-500: var(--branding-orange-500);
+  --color-branding-400: var(--branding-orange-400);
+  --color-accent-red-700: var(--accent-red-700);
+  --color-dark: var(--base-black);
+  --color-white: var(--base-white);
 
-    --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
-    --font-mono:
-        "Atkinson Hyperlegible", ui-monospace, "Cascadia Code",
-        "Source Code Pro", Menlo, "DejaVu Sans Mono", monospace;
+  --font-sans: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    'Atkinson Hyperlegible', ui-monospace, 'Cascadia Code', 'Source Code Pro',
+    Menlo, 'DejaVu Sans Mono', monospace;
 }
 
 body {
-    font-family: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif;
 }
