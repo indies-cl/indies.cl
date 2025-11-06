@@ -33,19 +33,24 @@
 }
 
 :root {
-  --branding-orange-600: #f02e06ff;
-  --branding-orange-500: #ff4f18ff;
-  --branding-orange-400: #ff6f37ff;
-  --neutral-1000: #141517ff;
-  --neutral-900: #393b40ff;
-  --neutral-800: #414449ff;
-  --neutral-700: #494d55ff;
-  --neutral-600: #555c65ff;
-  --neutral-300: #aab0b6ff;
-  --neutral-100: #f2f4f7ff;
-  --accent-red-700: #c10801ff;
-  --base-white: #ffffffff;
-  --base-black: #000000ff;
+  --branding-orange-600: #f02e06;
+  --branding-orange-500: #ff4f18;
+  --branding-orange-400: #ff6f37;
+  --branding-orange-300: #ffa170;
+  --neutral-1000: #141517;
+  --neutral-900: #393b40;
+  --neutral-800: #414449;
+  --neutral-700: #494d55;
+  --neutral-600: #555c65;
+  --neutral-300: #aab0b6;
+  --neutral-200: #ced1d3;
+  --neutral-100: #e4e6e9;
+  --neutral-50: #f2f4f7;
+  --black-opacity-80: #000000cc;
+  --discord-green: #3ba55c;
+  --discord-purple: #949cf7;
+  --base-white: #ffffff;
+  --base-black: #000000;
   --typography-font-weight-regular: Regular;
   --typography-font-weight-medium: Medium;
   --typography-family-family-body: Atkinson Hyperlegible;
@@ -54,6 +59,9 @@
 
 @theme {
   --color-background: var(--neutral-1000);
+  --color-background-secondary: var(--neutral-900);
+  --color-background-tertiary: var(--neutral-800);
+  --color-background-inverse: var(--base-white);
   --color-foreground: var(--neutral-100);
   --color-neutral-1000: var(--neutral-1000);
   --color-neutral-900: var(--neutral-900);
@@ -77,4 +85,16 @@
 
 body {
   font-family: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif;
+}
+
+.gradiant-bg-hero20 {
+  background: linear-gradient(0deg, #141517 0%, #000000 20%, #ff4f18 100%);
+}
+
+.gradiant-bg-hero48 {
+  background: linear-gradient(0deg, #141517 0%, #000000 48%, #ff4f18 100%);
+}
+
+body {
+  min-height: 100vh;
 }
