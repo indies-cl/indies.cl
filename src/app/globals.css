@@ -95,6 +95,23 @@ body {
   background: linear-gradient(0deg, #141517 0%, #000000 48%, #ff4f18 100%);
 }
 
-body {
-  min-height: 100vh;
+.button-box {
+  position: relative;
+}
+
+.button-box:active:after {
+  transform: translateY(4px);
+  transition: transform 0.3s ease-in-out;
+}
+
+.button-box::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  width: calc(100% + 16px);
+  height: 80%;
+
+  z-index: -1;
+  pointer-events: pointer;
+  transition: transform 0.2s ease-in-out;
 }

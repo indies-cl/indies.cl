@@ -5,11 +5,11 @@ export default function Home() {
     <main className="">
       <div className="absolute z-[-1] md:-top-[30dvw] xl:-top-[40dvw]">
         <Image
-          width={2000}
+          width={0}
           height={980}
           src="/background-elements.svg"
           alt="Background Elements"
-          className="w-screen max-w-screen"
+          className="w-full"
         />
       </div>
       <div className="absolute top-0 z-[-2] mx-auto h-[70dvh] w-full">
@@ -23,23 +23,30 @@ export default function Home() {
       </div>
       <section className="mx-auto flex h-[91dvh] max-w-[1280px] flex-col justify-between px-6 py-16">
         <div className="flex flex-col">
-          <div className="inline-flex items-center justify-center self-stretch">
+          <div className="hidden items-center justify-center self-stretch lg:inline-flex">
             <div className="flex items-center justify-center overflow-hidden">
-              <div className="text-color-foreground-primary justify-start leading-[120px] font-normal uppercase md:text-7xl lg:text-9xl">
+              <p className="text-color-foreground-primary justify-start leading-[120px] font-normal uppercase md:text-7xl lg:text-9xl">
                 hacemos
-              </div>
+              </p>
             </div>
             <div className="flex items-center justify-start overflow-hidden p-4">
-              <div className="text-color-foreground-primary max-w-96 flex-1 justify-center text-xl leading-8 font-normal">
+              <p className="text-color-foreground-primary max-w-96 flex-1 justify-center text-xl leading-8 font-normal">
                 Comunidad de devs, diseñadores y startups que crean cosas
                 bacanes en Chile.
-              </div>
+              </p>
             </div>
           </div>
-          <div className="inline-flex items-center justify-center self-stretch overflow-hidden">
+          <div className="hidden items-center justify-center self-stretch overflow-hidden lg:inline-flex">
             <div className="text-color-foreground-primary justify-start leading-[120px] font-normal uppercase md:text-7xl lg:text-9xl">
               cosas bacanes
             </div>
+          </div>
+          <div className="flex w-full flex-col justify-center lg:hidden">
+            <h1 className="text-center text-5xl">HACEMOS COSAS BACANES</h1>
+            <p className="text-center text-lg">
+              Comunidad de devs, diseñadores y startups que crean cosas bacanes
+              en Chile.
+            </p>
           </div>
         </div>
         <div className="flex justify-center">
@@ -93,11 +100,11 @@ export default function Home() {
           <p className="text-center">O compártelo con tus amigos</p>
         </div>
       </section>
-      <section className="mx-auto flex max-w-[1280px] flex-col justify-between px-6 py-16">
-        <h1 className="text-[4rem]">
+      <section className="mx-auto flex max-w-[1280px] flex-col justify-between gap-4 px-6 py-16">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl">
           El ecosistema donde tus ideas se vuelven bacanes
         </h1>
-        <p className="text-xl">
+        <p className="text-md md:text-lg lg:text-xl">
           Somos el lugar de encuentro para gente patua creando cosas choras,
           cualquiera que quiera apostar en su idea o en si mismo. Si eres de
           región construyendo tu startup, desarrollas un juego desde tu pieza, o
@@ -143,7 +150,7 @@ export default function Home() {
         </div>
       </section>
       <div className="flex justify-center pt-16 align-middle">
-        <h1 className="text-center text-7xl">
+        <h1 className="text-center text-4xl md:text-5xl lg:text-6xl">
           TEAM?
           <br />
           NAH.
@@ -151,30 +158,34 @@ export default function Home() {
       </div>
       <section className="bg-white text-black">
         <div className="mx-auto flex max-w-[1280px] flex-col justify-between gap-12 px-6">
-          <h1 className="text-center text-7xl">
+          <h1 className="text-center text-4xl md:text-5xl lg:text-6xl">
             JUST PEOPLE <span className="text-branding-500">DOING</span>
             <br />
             COOL SH*T TOGETHER
           </h1>
-          <p>
+          <p className="text-md md:text-lg lg:text-xl">
             Todo partió en un canal de Discord, entre café, memes y gente que
             quería hacer cosas bacanes. Ahora somos la mezcla perfecta de
             builders, soñadores y gente con demasiadas ideas.
           </p>
         </div>
-        <div className="mx-auto flex h-[600px] w-full justify-center align-middle">
+        <div className="mx-auto flex h-[600px] w-full flex-wrap justify-center align-middle">
           <p>discord here</p>
         </div>
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-12 py-16">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-12 px-6 py-16">
           <div>
-            <h1 className="text-6xl">ELLOS PAGAN LAS PIZZAS</h1>
-            <h1 className="text-6xl">(Y LOS AMAMOS POR ESO)</h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl">
+              ELLOS PAGAN LAS PIZZAS
+            </h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl">
+              (Y LOS AMAMOS POR ESO)
+            </h1>
           </div>
-          <p className="w-full md:w-1/2">
+          <p className="text-md w-full md:w-1/2 md:text-lg lg:text-xl">
             No tenemos inversionistas, tenemos gente buena onda que cree que una
             pizza puede cambiar el mundo (más o menos).
           </p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-6 md:justify-start">
             <div className="bg-background flex min-h-[206px] min-w-[244px] items-center px-4 py-1">
               <Image
                 src={'/communityos_logo.png'}
