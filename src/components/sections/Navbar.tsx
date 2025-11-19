@@ -1,0 +1,157 @@
+'use client';
+
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+import { StaggeredMenu } from '@/components/StaggeredMenu';
+
+export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const menuItems = [
+    {
+      label: 'Inicio',
+      ariaLabel: 'Ir a la página de inicio',
+      link: '/',
+    },
+    {
+      label: 'Comunidad',
+      ariaLabel: 'Ir a la sección de comunidad',
+      link: '/comunidad',
+    },
+    {
+      label: 'Eventos',
+      ariaLabel: 'Ver eventos de la comunidad',
+      link: '/eventos',
+    },
+    {
+      label: 'Código de Conducta',
+      ariaLabel: 'Ver el código de conducta',
+      link: '/codigo-de-conducta',
+    },
+  ];
+
+  const socialItems = [
+    {
+      label: 'Discord',
+      link: 'https://discord.gg/indies-cl',
+    },
+    {
+      label: 'GitHub',
+      link: 'https://github.com/indies-cl',
+    },
+    {
+      label: 'Twitter',
+      link: 'https://twitter.com/indiesclchile',
+    },
+  ];
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const renderNavContent = () => (
+    <nav className="relative mx-auto flex max-w-[1200px] items-center justify-between bg-transparent px-8 py-2">
+      <div>
+        <Link
+          href="/"
+          className="flex items-center gap-3 rounded-lg px-2 transition-all duration-200"
+        >
+          <h1 className="text-xl text-white">indies.cl</h1>
+        </Link>
+      </div>
+
+      {/* Desktop navigation */}
+      <div className="hidden items-center gap-8 md:flex">
+        {menuItems.map((item, index) => (
+          <Link
+            key={index}
+            href={item.link}
+            className="font-medium text-white transition-colors duration-200 hover:text-[#FF4F18]"
+            aria-label={item.ariaLabel}
+          >
+            {item.label}
+          </Link>
+        ))}
+        <div className="discord-icon">
+          <button className="h-full w-full cursor-pointer gap-2 bg-white p-3 hover:bg-neutral-100">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22.4817 6.21829C20.9301 5.49496 19.2501 4.96996 17.5001 4.66663C17.4693 4.66706 17.4399 4.67964 17.4184 4.70163C17.2084 5.08663 16.9634 5.58829 16.8001 5.97329C14.9439 5.69347 13.0562 5.69347 11.2001 5.97329C11.0367 5.57663 10.7917 5.08663 10.5701 4.70163C10.5584 4.67829 10.5234 4.66663 10.4884 4.66663C8.73839 4.96996 7.07006 5.49496 5.50672 6.21829C5.49506 6.21829 5.48339 6.22996 5.47172 6.24163C2.29839 10.99 1.42339 15.61 1.85506 20.1833C1.85506 20.2066 1.86672 20.23 1.89006 20.2416C3.99006 21.7816 6.00839 22.715 8.00339 23.3333C8.03839 23.345 8.07339 23.3333 8.08506 23.31C8.55172 22.6683 8.97172 21.9916 9.33339 21.28C9.35672 21.2333 9.33339 21.1866 9.28672 21.175C8.62172 20.9183 7.99172 20.615 7.37339 20.265C7.32672 20.2416 7.32672 20.1716 7.36172 20.1366C7.49006 20.0433 7.61839 19.9383 7.74672 19.845C7.77006 19.8216 7.80506 19.8216 7.82839 19.8333C11.8417 21.665 16.1701 21.665 20.1367 19.8333C20.1601 19.8216 20.1951 19.8216 20.2184 19.845C20.3467 19.95 20.4751 20.0433 20.6034 20.1483C20.6501 20.1833 20.6501 20.2533 20.5917 20.2766C19.9851 20.6383 19.3434 20.93 18.6784 21.1866C18.6317 21.1983 18.6201 21.2566 18.6317 21.2916C19.0051 22.0033 19.4251 22.68 19.8801 23.3216C19.9151 23.3333 19.9501 23.345 19.9851 23.3333C21.9917 22.715 24.0101 21.7816 26.1101 20.2416C26.1334 20.23 26.1451 20.2066 26.1451 20.1833C26.6584 14.8983 25.2934 10.3133 22.5284 6.24163C22.5167 6.22996 22.5051 6.21829 22.4817 6.21829ZM9.94006 17.395C8.73839 17.395 7.73506 16.2866 7.73506 14.9216C7.73506 13.5566 8.71506 12.4483 9.94006 12.4483C11.1767 12.4483 12.1567 13.5683 12.1451 14.9216C12.1451 16.2866 11.1651 17.395 9.94006 17.395ZM18.0717 17.395C16.8701 17.395 15.8667 16.2866 15.8667 14.9216C15.8667 13.5566 16.8467 12.4483 18.0717 12.4483C19.3084 12.4483 20.2884 13.5683 20.2767 14.9216C20.2767 16.2866 19.3084 17.395 18.0717 17.395Z"
+                fill="#FF4F18"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu button */}
+      <div className="flex gap-2 md:hidden">
+        <div className="discord-icon">
+          <button className="h-full w-full cursor-pointer gap-2 bg-white p-3 hover:bg-neutral-100">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22.4817 6.21829C20.9301 5.49496 19.2501 4.96996 17.5001 4.66663C17.4693 4.66706 17.4399 4.67964 17.4184 4.70163C17.2084 5.08663 16.9634 5.58829 16.8001 5.97329C14.9439 5.69347 13.0562 5.69347 11.2001 5.97329C11.0367 5.57663 10.7917 5.08663 10.5701 4.70163C10.5584 4.67829 10.5234 4.66663 10.4884 4.66663C8.73839 4.96996 7.07006 5.49496 5.50672 6.21829C5.49506 6.21829 5.48339 6.22996 5.47172 6.24163C2.29839 10.99 1.42339 15.61 1.85506 20.1833C1.85506 20.2066 1.86672 20.23 1.89006 20.2416C3.99006 21.7816 6.00839 22.715 8.00339 23.3333C8.03839 23.345 8.07339 23.3333 8.08506 23.31C8.55172 22.6683 8.97172 21.9916 9.33339 21.28C9.35672 21.2333 9.33339 21.1866 9.28672 21.175C8.62172 20.9183 7.99172 20.615 7.37339 20.265C7.32672 20.2416 7.32672 20.1716 7.36172 20.1366C7.49006 20.0433 7.61839 19.9383 7.74672 19.845C7.77006 19.8216 7.80506 19.8216 7.82839 19.8333C11.8417 21.665 16.1701 21.665 20.1367 19.8333C20.1601 19.8216 20.1951 19.8216 20.2184 19.845C20.3467 19.95 20.4751 20.0433 20.6034 20.1483C20.6501 20.1833 20.6501 20.2533 20.5917 20.2766C19.9851 20.6383 19.3434 20.93 18.6784 21.1866C18.6317 21.1983 18.6201 21.2566 18.6317 21.2916C19.0051 22.0033 19.4251 22.68 19.8801 23.3216C19.9151 23.3333 19.9501 23.345 19.9851 23.3333C21.9917 22.715 24.0101 21.7816 26.1101 20.2416C26.1334 20.23 26.1451 20.2066 26.1451 20.1833C26.6584 14.8983 25.2934 10.3133 22.5284 6.24163C22.5167 6.22996 22.5051 6.21829 22.4817 6.21829ZM9.94006 17.395C8.73839 17.395 7.73506 16.2866 7.73506 14.9216C7.73506 13.5566 8.71506 12.4483 9.94006 12.4483C11.1767 12.4483 12.1567 13.5683 12.1451 14.9216C12.1451 16.2866 11.1651 17.395 9.94006 17.395ZM18.0717 17.395C16.8701 17.395 15.8667 16.2866 15.8667 14.9216C15.8667 13.5566 16.8467 12.4483 18.0717 12.4483C19.3084 12.4483 20.2884 13.5683 20.2767 14.9216C20.2767 16.2866 19.3084 17.395 18.0717 17.395Z"
+                fill="#FF4F18"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="menu-icon">
+          <button
+            className="bg-dark h-full w-full cursor-pointer gap-2 p-3 hover:bg-neutral-900"
+            onClick={handleMenuToggle}
+          >
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.5 21V18.6667H24.5V21H3.5ZM3.5 15.1667V12.8333H24.5V15.1667H3.5ZM3.5 9.33333V7H24.5V9.33333H3.5Z"
+                fill="#F2F4F7"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+
+  return (
+    <>
+      <header className="w-full">
+        {renderNavContent()}
+      </header>
+
+      <div className="pointer-events-none fixed inset-0 z-50">
+        <StaggeredMenu
+          position="right"
+          colors={['#FF4F18', '#000000', '#1a1a1a']}
+          items={menuItems}
+          socialItems={socialItems}
+          displaySocials={true}
+          displayItemNumbering={true}
+          accentColor="#FF4F18"
+          isFixed={true}
+          isOpen={isMenuOpen}
+          onMenuClose={() => setIsMenuOpen(false)}
+        />
+      </div>
+    </>
+  );
+}
