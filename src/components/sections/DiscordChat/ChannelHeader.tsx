@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
 import {
-  Notifications,
-  People,
-  FileTray,
+  Bell,
+  Users,
+  Inbox,
   HelpCircle,
   Bookmark,
   Search,
-} from 'styled-icons/ionicons-solid';
-import { Hashtag } from 'styled-icons/heroicons-outline';
+  Hash,
+} from 'lucide-react';
 
 interface ChannelHeaderProps {
   onOpenModal?: () => void;
@@ -31,24 +31,24 @@ const ChannelHeader: FC<ChannelHeaderProps> = ({ onOpenModal }) => {
   return (
     <div className="h-16 w-full flex px-6 bg-[#36393f] shadow-[0_1px_0_0_rgba(0,0,0,0.2)] z-2 relative box-border items-center">
       <div className="flex-1 flex items-center">
-        <Hashtag className="w-6 h-6 text-[#8e9297]" />
+        <Hash className="w-6 h-6 text-[#8e9297]" />
         <h1 className="ml-2 text-base font-bold text-white m-0">Chat</h1>
         <div className="h-6 w-px bg-white opacity-20 mx-3" />
         <span className="text-sm text-[#72767d]">chat general</span>
       </div>
 
       <div className="flex items-center">
-        <Notifications 
+        <Bell
           onClick={onOpenModal}
-          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white" 
+          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white"
         />
-        <Bookmark 
+        <Bookmark
           onClick={onOpenModal}
-          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white" 
+          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white"
         />
-        <People 
+        <Users
           onClick={onOpenModal}
-          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white" 
+          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white"
         />
 
         <div className="mx-1.5 p-1 bg-[#40444b] rounded overflow-hidden flex items-center">
@@ -66,9 +66,9 @@ const ChannelHeader: FC<ChannelHeaderProps> = ({ onOpenModal }) => {
           />
         </div>
 
-        <FileTray 
+        <Inbox
           onClick={onOpenModal}
-          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white" 
+          className="w-5 h-5 text-[#72767d] transition-colors duration-200 mx-1.5 cursor-pointer hover:text-white"
         />
         <HelpCircle 
           onClick={onOpenModal}

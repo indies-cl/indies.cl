@@ -1,4 +1,4 @@
-import { FC, useRef, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState, useCallback } from 'react';
 import ChannelMessage from './ChannelMessage';
 import { mockMessages, users } from './constants';
 
@@ -11,224 +11,249 @@ interface MessagesListProps {
   onOpenModal?: () => void;
 }
 
-const MessagesList: FC<MessagesListProps> = ({ onTypingChange, onTypingUsersChange, onAnimationFinished, userHasTyped, enableAnimations, onOpenModal }) => {
-  const messagesRef = useRef<HTMLDivElement>(null);
-  const [visibleMessages, setVisibleMessages] = useState<number>(0);
-  const [isTyping, setIsTyping] = useState<boolean>(false);
+const MessagesList: FC<MessagesListProps> = ({
+  onTypingChange,
+  onTypingUsersChange,
+  onAnimationFinished,
+  userHasTyped,
+  enableAnimations,
+  onOpenModal,
+}) => {
+  const [visibleMessages, setVisibleMessages] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
   const [typingUsers, setTypingUsers] = useState<{ name: string; avatar: string }[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isInViewport, setIsInViewport] = useState<boolean>(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
+  const animationAbortRef = useRef(false);
+
+  /* --------------------------------------------------------- */
+  /* PREFERS REDUCED MOTION                                    */
+  /* --------------------------------------------------------- */
   useEffect(() => {
-    const div = messagesRef.current;
-    if (div) {
-      div.scrollTop = div.scrollHeight;
-    }
-  }, [visibleMessages, isTyping]);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
 
-  // Intersection Observer para detectar viewport
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isInViewport) {
-          setIsInViewport(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+    mq.addEventListener('change', handleChange);
+    return () => mq.removeEventListener('change', handleChange);
+  }, []);
 
-    return () => observer.disconnect();
-  }, [isInViewport]);
+  /* --------------------------------------------------------- */
+  /* ANIMATION OR REPLAY LOGIC                                 */
+  /* --------------------------------------------------------- */
+  const runReplay = useCallback(async () => {
+    animationAbortRef.current = false;
 
-  useEffect(() => {
-    if (!isInViewport) return;
-    
-    if (!enableAnimations) {
-      // Sin animaciones de escritura pero con efecto staggered
-      setVisibleMessages(0);
+    const cancelCheck = () => animationAbortRef.current;
+    const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+    // Si reduce motion: mostrar todo inmediatamente
+    if (prefersReducedMotion) {
+      setVisibleMessages(mockMessages.length);
       setIsTyping(false);
       setTypingUsers([]);
       onTypingChange(false);
       onTypingUsersChange([]);
-      
-      const showMessagesStaggered = async () => {
-        for (let i = 0; i < mockMessages.length; i++) {
-          setVisibleMessages(i + 1);
-          // Delay muy corto para efecto fluido
-          if (i < mockMessages.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 150));
-          }
-        }
-        onAnimationFinished(true);
-      };
-      
-      showMessagesStaggered();
+      onAnimationFinished(true);
       return;
     }
-    
-    // Reset and start animation
-    setVisibleMessages(0);
-    setIsTyping(false);
-    
-    const showMessages = async () => {
-      // Primer mensaje sale inmediatamente
-      if (mockMessages.length > 0) {
-        setVisibleMessages(1);
-      }
-      
-      for (let i = 1; i < mockMessages.length; i++) {
-        // Mostrar indicador de "está escribiendo" desde el inicio del timer
-        const nextMessage = mockMessages[i];
-        const userId = ('userId' in nextMessage) ? nextMessage.userId : null;
-        const user = userId ? users[userId] : null;
-        
-        if (user) {
-          const typingUsersList = [{ name: user.name, avatar: user.avatar }];
-          setTypingUsers(typingUsersList);
-          setIsTyping(true);
-          onTypingUsersChange(typingUsersList);
-          onTypingChange(true);
-          
-          // Si el usuario ya empezó a escribir, acelerar todo a 0.5s
-          const baseDelay = userHasTyped ? 500 : (1000 + Math.random() * 1000); // 0.5s si escribió, 1-2s si no
-          await new Promise(resolve => setTimeout(resolve, baseDelay));
-          
-          setIsTyping(false);
-          setTypingUsers([]);
-          onTypingChange(false);
-          onTypingUsersChange([]);
-        }
-        
-        // Mostrar el mensaje
-        setVisibleMessages(prev => prev + 1);
-        
-        // Pausa antes del próximo mensaje (misma lógica acelerada)
-        if (i < mockMessages.length - 1) {
-          const messageDelay = userHasTyped ? 500 : (1000 + Math.random() * 1000);
-          await new Promise(resolve => setTimeout(resolve, messageDelay));
-        }
-      }
-      
-      // Notificar que la animación terminó
+
+    // Si no debe haber animación todavía: mostrar pero sin typing
+    if (!enableAnimations) {
+      setVisibleMessages(mockMessages.length);
+      setIsTyping(false);
+      setTypingUsers([]);
+      onTypingChange(false);
+      onTypingUsersChange([]);
       onAnimationFinished(true);
-    };
+      return;
+    }
 
-    showMessages();
-  }, [isInViewport, onAnimationFinished, onTypingChange, onTypingUsersChange, userHasTyped, enableAnimations]);
+    // Reset clean
+    setVisibleMessages(0);
+    setTypingUsers([]);
+    setIsTyping(false);
+    onTypingChange(false);
+    onTypingUsersChange([]);
+    onAnimationFinished(false);
 
+    // Pequeño delay antes del primer mensaje
+    await sleep(500);
+    if (cancelCheck()) return;
 
+    // Primer mensaje
+    if (mockMessages.length > 0) {
+      setVisibleMessages(1);
+    }
+
+    for (let i = 1; i < mockMessages.length; i++) {
+      if (cancelCheck()) return;
+
+      const msg = mockMessages[i];
+      const userId = 'userId' in msg ? msg.userId : null;
+      const user = userId ? users[userId] : null;
+
+      if (user) {
+        const list = [{ name: user.name, avatar: user.avatar }];
+        setTypingUsers(list);
+        setIsTyping(true);
+        onTypingUsersChange(list);
+        onTypingChange(true);
+
+        // Calcular tiempo de escritura basándose en la longitud del mensaje
+        const content = 'content' in msg ? msg.content : null;
+        const messageLength = typeof content === 'string' ? content.length : 50;
+        const baseTypingSpeed = 40; // ms por carácter
+        let typingTime = messageLength * baseTypingSpeed;
+
+        // Delays específicos para ciertos mensajes
+        const messageId = 'id' in msg ? msg.id : null;
+        if (userId === 'reno' && content === 'EVENT_CARD') {
+          // Reno creando la call - demora más
+          typingTime = 1700;
+        } else if (userId === 'damian' && messageId === 2) {
+          // Damián respondiendo - demora más para dar tiempo de leer
+          typingTime = 1500;
+        }
+
+        const typingDelay = userHasTyped
+          ? Math.max(300, typingTime * 0.3)
+          : typingTime + (Math.random() * 200);
+
+        await sleep(typingDelay);
+
+        if (cancelCheck()) return;
+
+        setIsTyping(false);
+        setTypingUsers([]);
+        onTypingChange(false);
+        onTypingUsersChange([]);
+      }
+
+      setVisibleMessages(prev => prev + 1);
+
+      // Delay después de mostrar el mensaje
+      let msgDelay = userHasTyped ? 300 : 400 + Math.random() * 300;
+
+      // Delays adicionales después de ciertos mensajes para dar tiempo de leer
+      const messageId = 'id' in msg ? msg.id : null;
+      const isStatement = 'isStatement' in msg ? msg.isStatement : false;
+
+      // Reducir delay después del primer statement de Reno (para que el EVENT_CARD aparezca más rápido)
+      if (isStatement && userId === 'reno') {
+        msgDelay = userHasTyped ? 200 : 300;
+      } else if (messageId === 1) {
+        // Después del EVENT_CARD de Reno, dar más tiempo
+        msgDelay = userHasTyped ? 900 : 1500;
+      } else if (messageId === 2) {
+        // Después del mensaje de Damián, dar más tiempo
+        msgDelay = userHasTyped ? 800 : 1200;
+      }
+
+      await sleep(msgDelay);
+    }
+
+    if (!cancelCheck()) {
+      onAnimationFinished(true);
+    }
+  }, [enableAnimations, prefersReducedMotion, userHasTyped, onTypingChange, onTypingUsersChange, onAnimationFinished]);
+
+  // Lanzar la animación solo cuando enableAnimations cambia / monta
   useEffect(() => {
+    animationAbortRef.current = true;
+    runReplay();
+
+    return () => {
+      animationAbortRef.current = true;
+    };
+  }, [runReplay]);
+
+  /* --------------------------------------------------------- */
+  /*  INJECT STYLES ONCE                                      */
+  /* --------------------------------------------------------- */
+  useEffect(() => {
+    if (document.getElementById('discord-chat-styles')) return;
+
     const style = document.createElement('style');
     style.id = 'discord-chat-styles';
     style.textContent = `
-      .messages-container::-webkit-scrollbar {
-        width: 8px;
-      }
+      .messages-container::-webkit-scrollbar { width: 8px; }
       .messages-container::-webkit-scrollbar-thumb {
         background-color: #40444b;
         border-radius: 4px;
       }
-      .messages-container::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
-      .discord-icon:hover {
-        color: #ffffff !important;
-      }
+      .messages-container::-webkit-scrollbar-track { background: transparent; }
+
       .message-item + .message-item {
         margin-top: 13px;
       }
-      
-      /* Discord typing dots animation */
+
+      @keyframes messageFadeIn {
+        from { opacity: 0; transform: translateY(2px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .message-item--new {
+        animation: messageFadeIn 0.16s ease-out;
+      }
+
       @keyframes typing-dots {
-        0%, 60%, 100% {
-          transform: translateY(0);
-          opacity: 0.4;
-        }
-        30% {
-          transform: translateY(-4px);
-          opacity: 1;
-        }
+        0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+        30% { transform: translateY(-3px); opacity: 1; }
       }
-      
-      /* Message slide up and fade animation */
-      @keyframes slideUpFade {
-        0% {
-          opacity: 0;
-          transform: translateY(16px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
+
+      @media (prefers-reduced-motion: reduce) {
+        .message-item--new { animation: none !important; }
       }
-      
-      .typing-dot {
-        animation: typing-dots 1.5s infinite;
-      }
-      
-      .typing-dot:nth-child(1) {
-        animation-delay: 0s;
-      }
-      
-      .typing-dot:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      
-      .typing-dot:nth-child(3) {
-        animation-delay: 0.4s;
-      }
+
+      .typing-dot { animation: typing-dots 1.5s infinite; }
+      .typing-dot:nth-child(1) { animation-delay: 0s; }
+      .typing-dot:nth-child(2) { animation-delay: .2s; }
+      .typing-dot:nth-child(3) { animation-delay: .4s; }
     `;
-    
-    const existingStyle = document.getElementById('discord-chat-styles');
-    if (!existingStyle) {
-      document.head.appendChild(style);
-    }
-    
+
+    document.head.appendChild(style);
+
     return () => {
-      const styleToRemove = document.getElementById('discord-chat-styles');
-      if (styleToRemove && styleToRemove.parentNode) {
-        styleToRemove.parentNode.removeChild(styleToRemove);
-      }
+      const el = document.getElementById('discord-chat-styles');
+      if (el) el.remove();
     };
   }, []);
 
+  /* --------------------------------------------------------- */
+  /* RENDER                                                    */
+  /* --------------------------------------------------------- */
   return (
-    <div
-      ref={containerRef}
-      className="py-5 flex flex-col gap-3"
-    >
-      <div ref={messagesRef}>
-        {mockMessages.slice(0, visibleMessages).map((message, index) => {
-          const userId = ('userId' in message) ? message.userId : null;
-          const avatar = userId ? users[userId]?.avatar : '';
-          
-          return (
-            <div 
-              key={('id' in message) ? message.id : `statement-${index}`}
-              className="message-item"
-              style={{
-                animation: `slideUpFade 0.3s ease-out ${index * 0.1}s both`
-              }}
-            >
-              <ChannelMessage
-                author={message.author}
-                date={message.date}
-                content={('content' in message) ? message.content : undefined}
-                hasMention={('hasMention' in message) ? message.hasMention : false}
-                isBot={('isBot' in message) ? message.isBot : false}
-                isStatement={('isStatement' in message) ? message.isStatement : false}
-                action={('action' in message) ? message.action : undefined}
-                avatar={avatar}
-                onOpenModal={onOpenModal}
-              />
-            </div>
-          );
-        })}
-      </div>
+    <div className="flex flex-col gap-3 px-2 py-5">
+      {mockMessages.slice(0, visibleMessages).map((message, index) => {
+        const userId = 'userId' in message ? message.userId : null;
+        const avatar = userId ? users[userId]?.avatar : '';
+        const isLast = index === visibleMessages - 1;
+
+        return (
+          <div
+            key={'id' in message ? message.id : `statement-${index}`}
+            className={`message-item ${
+              !prefersReducedMotion && enableAnimations && isLast ? 'message-item--new' : ''
+            }`}
+          >
+            <ChannelMessage
+              author={message.author}
+              date={message.date}
+              content={'content' in message ? message.content : undefined}
+              hasMention={'hasMention' in message ? message.hasMention : false}
+              isBot={'isBot' in message ? message.isBot : false}
+              isStatement={'isStatement' in message ? message.isStatement : false}
+              action={'action' in message ? message.action : undefined}
+              avatar={avatar}
+              onOpenModal={onOpenModal}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };

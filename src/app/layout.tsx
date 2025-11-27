@@ -80,6 +80,9 @@ export default function RootLayout({
     <html lang="es" className="dark">
       <head>
         <link rel="icon" href="/gatito-indies.ico" />
+        {/* Preload critical images for faster LCP */}
+        <link rel="preload" href="/indies-crowd.webp" as="image" />
+        <link rel="preload" href="/indies-crowd-depth.webp" as="image" />
       </head>
       <body className="bg-background text-foreground relative">
         <div className="absolute top-0 z-[-2] mx-auto h-[70dvh] w-full">

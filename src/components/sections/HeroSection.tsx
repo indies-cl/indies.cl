@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export default function Hero() {
+export default function HeroSection() {
   return (
     <div>
       <div className="absolute z-[-1] md:-top-[30dvw] xl:-top-[40dvw]">
