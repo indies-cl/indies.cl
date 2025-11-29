@@ -16,7 +16,9 @@ const inter = Inter({
 
 const DiscordChat: FC = () => {
   const [isTyping, setIsTyping] = useState(false);
-  const [typingUsers, setTypingUsers] = useState<{ name: string; avatar: string }[]>([]);
+  const [typingUsers, setTypingUsers] = useState<
+    { name: string; avatar: string }[]
+  >([]);
   const [animationFinished, setAnimationFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [userHasTyped, setUserHasTyped] = useState(false);
@@ -51,7 +53,7 @@ const DiscordChat: FC = () => {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.15 },
     );
 
     if (containerRef.current) {
@@ -83,8 +85,8 @@ const DiscordChat: FC = () => {
     const container = messagesContainerRef.current;
     if (!container) return;
 
-    const mutationObserver = new MutationObserver(mutations => {
-      const hasAddedNodes = mutations.some(m => m.addedNodes.length > 0);
+    const mutationObserver = new MutationObserver((mutations) => {
+      const hasAddedNodes = mutations.some((m) => m.addedNodes.length > 0);
       if (!hasAddedNodes) return;
       if (!shouldAutoScrollRef.current) return;
 
@@ -121,7 +123,7 @@ const DiscordChat: FC = () => {
     (users: { name: string; avatar: string }[]) => {
       setTypingUsers(users);
     },
-    []
+    [],
   );
 
   const handleAnimationFinished = useCallback((finished: boolean) => {
@@ -132,7 +134,7 @@ const DiscordChat: FC = () => {
     setUserHasTyped(true);
   }, []);
 
-  const handleMessageSent = useCallback((message: string) => {
+  const handleMessageSent = useCallback(() => {
     setShowModal(true);
     // No hacemos scroll aquí: el MutationObserver se encargará
   }, []);
@@ -142,12 +144,12 @@ const DiscordChat: FC = () => {
    * -------------------------------------------------- */
   const isInputDisabled = useMemo(
     () => !animationFinished && !userHasTyped,
-    [animationFinished, userHasTyped]
+    [animationFinished, userHasTyped],
   );
 
   const shouldShowTypingInInput = useMemo(
     () => enableAnimations && animationFinished,
-    [enableAnimations, animationFinished]
+    [enableAnimations, animationFinished],
   );
 
   /* ----------------------------------------------------
@@ -156,7 +158,7 @@ const DiscordChat: FC = () => {
   return (
     <div
       ref={containerRef}
-      className={`relative flex h-[700px] w-full max-w-[800px] flex-col rounded-2xl mx-auto overflow-hidden ${inter.variable}`}
+      className={`relative mx-auto flex h-[700px] w-full max-w-[800px] flex-col overflow-hidden rounded-2xl ${inter.variable}`}
       style={{
         fontFamily:
           'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -187,9 +189,7 @@ const DiscordChat: FC = () => {
 
         {/* Typing indicator arriba del input */}
         <div className="relative h-5 bg-[#36393f]">
-          {isTyping && (
-            <TypingIndicator users={typingUsers} />
-          )}
+          {isTyping && <TypingIndicator users={typingUsers} />}
         </div>
 
         <ChatInput
@@ -200,7 +200,10 @@ const DiscordChat: FC = () => {
         />
       </div>
 
-      <JoinDiscordModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      <JoinDiscordModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };

@@ -1,15 +1,10 @@
-"use client";
+'use client';
 
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  MutableRefObject,
-} from "react";
+import React, { useRef, useEffect, useState, MutableRefObject } from 'react';
 
 interface ImageWithDepthProps {
-  imageSrc: string;   // ruta a la imagen
-  depthSrc: string;   // ruta al depth map (blanco = cerca)
+  imageSrc: string; // ruta a la imagen
+  depthSrc: string; // ruta al depth map (blanco = cerca)
   /**
    * Intensidad “lógica” del efecto (0–1).
    * Internamente se mapea a un desplazamiento UV seguro.
@@ -27,7 +22,7 @@ interface ImageWithDepthProps {
  * del contenedor en el viewport (parallax basado en scroll).
  */
 function useSectionParallax(
-  ref: MutableRefObject<HTMLDivElement | null>
+  ref: MutableRefObject<HTMLDivElement | null>,
 ): number {
   const [value, setValue] = useState<number>(0);
 
@@ -47,12 +42,12 @@ function useSectionParallax(
     };
 
     handle();
-    window.addEventListener("scroll", handle, { passive: true });
-    window.addEventListener("resize", handle);
+    window.addEventListener('scroll', handle, { passive: true });
+    window.addEventListener('resize', handle);
 
     return () => {
-      window.removeEventListener("scroll", handle);
-      window.removeEventListener("resize", handle);
+      window.removeEventListener('scroll', handle);
+      window.removeEventListener('resize', handle);
     };
   }, [ref]);
 
@@ -64,18 +59,18 @@ function useSectionParallax(
 function createShader(
   gl: WebGLRenderingContext,
   type: number,
-  source: string
+  source: string,
 ): WebGLShader {
   const shader = gl.createShader(type);
   if (!shader) {
-    throw new Error("No se pudo crear shader");
+    throw new Error('No se pudo crear shader');
   }
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     const info = gl.getShaderInfoLog(shader);
     gl.deleteShader(shader);
-    throw new Error("Error compilando shader: " + info);
+    throw new Error('Error compilando shader: ' + info);
   }
   return shader;
 }
@@ -83,13 +78,13 @@ function createShader(
 function createProgram(
   gl: WebGLRenderingContext,
   vsSource: string,
-  fsSource: string
+  fsSource: string,
 ): WebGLProgram {
   const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
   const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
   const program = gl.createProgram();
   if (!program) {
-    throw new Error("No se pudo crear programa");
+    throw new Error('No se pudo crear programa');
   }
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);
@@ -97,32 +92,25 @@ function createProgram(
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     const info = gl.getProgramInfoLog(program);
     gl.deleteProgram(program);
-    throw new Error("Error linkeando programa: " + info);
+    throw new Error('Error linkeando programa: ' + info);
   }
   return program;
 }
 
 function createTextureFromImage(
   gl: WebGLRenderingContext,
-  image: HTMLImageElement
+  image: HTMLImageElement,
 ): WebGLTexture {
   const tex = gl.createTexture();
   if (!tex) {
-    throw new Error("No se pudo crear textura");
+    throw new Error('No se pudo crear textura');
   }
   gl.bindTexture(gl.TEXTURE_2D, tex);
 
   // Importante para que no quede invertida verticalmente
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
 
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    0,
-    gl.RGBA,
-    gl.RGBA,
-    gl.UNSIGNED_BYTE,
-    image
-  );
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -208,7 +196,7 @@ const FRAGMENT_SHADER_SOURCE = `
 const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
   imageSrc,
   depthSrc,
-  strength = 0.4,  // valor "divertido" por defecto (0–1)
+  strength = 0.4, // valor "divertido" por defecto (0–1)
   smoothing = 0.18,
   height = 550,
 }) => {
@@ -223,7 +211,8 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
   }, [parallax]);
 
   const [webglOk, setWebglOk] = useState<boolean>(true);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] =
+    useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   // Detectar preferencia de reduce motion
@@ -251,7 +240,7 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
           }
         });
       },
-      { rootMargin: '50px' }
+      { rootMargin: '50px' },
     );
 
     if (containerRef.current) {
@@ -272,13 +261,12 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
     if (!container || !canvas) return;
 
     const context =
-      canvas.getContext("webgl") ??
-      canvas.getContext("experimental-webgl");
+      canvas.getContext('webgl') ?? canvas.getContext('experimental-webgl');
 
     const gl = context as WebGLRenderingContext | null;
 
     if (!gl) {
-      console.warn("WebGL no disponible, usando fallback <img>.");
+      console.warn('WebGL no disponible, usando fallback <img>.');
       setWebglOk(false);
       return;
     }
@@ -306,11 +294,11 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
 
     const img: HTMLImageElement = new Image();
     const depth: HTMLImageElement = new Image();
-    img.crossOrigin = "anonymous";
-    depth.crossOrigin = "anonymous";
+    img.crossOrigin = 'anonymous';
+    depth.crossOrigin = 'anonymous';
     // Priorizar la carga de estas imágenes
-    img.fetchPriority = "high";
-    depth.fetchPriority = "high";
+    img.fetchPriority = 'high';
+    depth.fetchPriority = 'high';
     img.src = imageSrc;
     depth.src = depthSrc;
 
@@ -321,7 +309,7 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
 
       canvas.width = width;
       canvas.height = h;
-      canvas.style.width = "100%";
+      canvas.style.width = '100%';
       canvas.style.height = `${h}px`;
 
       gl.viewport(0, 0, width, h);
@@ -337,30 +325,18 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
       program = createProgram(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE);
       gl.useProgram(program);
 
-      const posLoc = gl.getAttribLocation(program, "a_position");
-      const uvLoc = gl.getAttribLocation(program, "a_uv");
+      const posLoc = gl.getAttribLocation(program, 'a_position');
+      const uvLoc = gl.getAttribLocation(program, 'a_uv');
 
       const positions = new Float32Array([
-        -1, -1,
-        1, -1,
-        -1, 1,
-        -1, 1,
-        1, -1,
-        1, 1,
+        -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1,
       ]);
 
-      const uvs = new Float32Array([
-        0, 0,
-        1, 0,
-        0, 1,
-        0, 1,
-        1, 0,
-        1, 1,
-      ]);
+      const uvs = new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]);
 
       positionBuffer = gl.createBuffer();
       if (!positionBuffer) {
-        throw new Error("No se pudo crear positionBuffer");
+        throw new Error('No se pudo crear positionBuffer');
       }
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
@@ -369,19 +345,19 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
 
       uvBuffer = gl.createBuffer();
       if (!uvBuffer) {
-        throw new Error("No se pudo crear uvBuffer");
+        throw new Error('No se pudo crear uvBuffer');
       }
       gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
       gl.enableVertexAttribArray(uvLoc);
       gl.vertexAttribPointer(uvLoc, 2, gl.FLOAT, false, 0, 0);
 
-      uImageLoc = gl.getUniformLocation(program, "u_image");
-      uDepthLoc = gl.getUniformLocation(program, "u_depth");
-      uScrollLoc = gl.getUniformLocation(program, "u_scroll");
-      uStrengthLoc = gl.getUniformLocation(program, "u_strength");
-      uImgAspectLoc = gl.getUniformLocation(program, "u_imgAspect");
-      uCanvasAspectLoc = gl.getUniformLocation(program, "u_canvasAspect");
+      uImageLoc = gl.getUniformLocation(program, 'u_image');
+      uDepthLoc = gl.getUniformLocation(program, 'u_depth');
+      uScrollLoc = gl.getUniformLocation(program, 'u_scroll');
+      uStrengthLoc = gl.getUniformLocation(program, 'u_strength');
+      uImgAspectLoc = gl.getUniformLocation(program, 'u_imgAspect');
+      uCanvasAspectLoc = gl.getUniformLocation(program, 'u_canvasAspect');
 
       // Mapear strength (0–1) a un rango UV sano y con buen efecto (0.05–0.35)
       if (uStrengthLoc) {
@@ -479,7 +455,7 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
     }
 
     const resizeObserver: ResizeObserver | null =
-      typeof ResizeObserver !== "undefined"
+      typeof ResizeObserver !== 'undefined'
         ? new ResizeObserver(() => {
             resizeCanvas();
           })
@@ -514,21 +490,22 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
       <div
         ref={containerRef}
         style={{
-          width: "100%",
+          width: '100%',
           height: `${height}px`,
-          overflow: "hidden",
-          position: "relative",
+          overflow: 'hidden',
+          position: 'relative',
         }}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageSrc}
-          alt=""
+          alt="depth image"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            display: "block",
-            filter: "grayscale(100%)",
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            filter: 'grayscale(100%)',
           }}
         />
       </div>
@@ -539,20 +516,20 @@ const ImageWithDepth: React.FC<ImageWithDepthProps> = ({
     <div
       ref={containerRef}
       style={{
-        width: "100%",
+        width: '100%',
         height: `${height}px`,
-        overflow: "hidden",
-        position: "relative",
-        backgroundColor: "black",
+        overflow: 'hidden',
+        position: 'relative',
+        backgroundColor: 'black',
       }}
     >
       <canvas
         ref={canvasRef}
         style={{
-          width: "100%",
-          height: "100%",
-          display: "block",
-          filter: "grayscale(100%)",
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          filter: 'grayscale(100%)',
         }}
       />
     </div>

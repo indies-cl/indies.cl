@@ -3,17 +3,16 @@ import Link from 'next/link';
 import * as Dialog from '@radix-ui/react-dialog';
 import { motion, AnimatePresence, useAnimate } from 'motion/react';
 
-
 export type MenuItems = {
   label: string;
   link: string;
   ariaLabel?: string;
-} & React.ReactNode
+} & React.ReactNode;
 
 export type SocialItems = {
   label: string;
   link: string;
-}
+};
 
 export interface StaggeredMenuProps {
   items: React.ReactNode[];
@@ -84,12 +83,14 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <Dialog.Content
           forceMount
           key="content"
-          className={`fixed grid ${position === 'left' ? 'left-0' : 'right-0'} inset-y-0 max-w-lvw w-full sm:w-124 z-50`}
+          className={`fixed grid ${position === 'left' ? 'left-0' : 'right-0'} inset-y-0 z-50 w-full max-w-lvw sm:w-124`}
           style={{ '--sm-accent': accentColor } as React.CSSProperties}
         >
-
           <Dialog.Title className="sr-only">Menu</Dialog.Title>
-          <div className="pointer-events-none z-5 col-start-1 row-start-1 size-full" aria-hidden="true">
+          <div
+            className="pointer-events-none z-5 col-start-1 row-start-1 size-full"
+            aria-hidden="true"
+          >
             {colors.map((c, i) => (
               <motion.div
                 key={i}
@@ -109,7 +110,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
           <motion.aside
             id="staggered-menu-panel"
-            className="col-start-1 row-start-1 staggered-menu-panel z-10 flex h-full flex-col bg-white p-[3em_2em_2em_2em] backdrop-blur-md w-full"
+            className="staggered-menu-panel z-10 col-start-1 row-start-1 flex h-full w-full flex-col bg-white p-[3em_2em_2em_2em] backdrop-blur-md"
             style={{
               WebkitBackdropFilter: 'blur(12px)',
             }}
@@ -127,11 +128,14 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               <motion.ul
                 className="sm-panel-list m-0 flex list-none flex-col gap-2 p-0"
                 role="list"
-                data-numbering={displayItemNumbering ? "" : undefined}
+                data-numbering={displayItemNumbering ? '' : undefined}
                 initial={false}
               >
                 {items.map((item, index) => (
-                  <StaggeredMenuItemContent.Provider value={{ index, panelStartTime }} key={index}>
+                  <StaggeredMenuItemContent.Provider
+                    value={{ index, panelStartTime }}
+                    key={index}
+                  >
                     {item}
                   </StaggeredMenuItemContent.Provider>
                 ))}
@@ -154,12 +158,15 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                   Socials
                 </motion.h3>
                 <motion.ul
-                  className="sm-socials-list m-0 flex list-none flex-row flex-wrap items-center gap-4 p-0 group"
+                  className="sm-socials-list group m-0 flex list-none flex-row flex-wrap items-center gap-4 p-0"
                   role="list"
                   initial={false}
                 >
                   {socialItems.map((socialItem, i) => (
-                    <StaggeredSocialItemContent.Provider value={{ socialsStartTime, index: i }} key={i}>
+                    <StaggeredSocialItemContent.Provider
+                      value={{ socialsStartTime, index: i }}
+                      key={i}
+                    >
                       {socialItem}
                     </StaggeredSocialItemContent.Provider>
                   ))}
@@ -189,29 +196,27 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       `}</style>
         </Dialog.Content>
       </AnimatePresence>
-
     </Dialog.Portal>
   );
 };
 
-export function StaggeredMenuRoot({ children, ...props }: ComponentProps<typeof Dialog.Root>) {
-  return (
-    <Dialog.Root {...props}>
-      {children}
-    </Dialog.Root>
-  );
+export function StaggeredMenuRoot({
+  children,
+  ...props
+}: ComponentProps<typeof Dialog.Root>) {
+  return <Dialog.Root {...props}>{children}</Dialog.Root>;
 }
 
-export function StaggeredMenuTrigger(props: ComponentProps<typeof Dialog.Trigger>) {
+export function StaggeredMenuTrigger(
+  props: ComponentProps<typeof Dialog.Trigger>,
+) {
   return <Dialog.Trigger {...props} />;
 }
-
 
 const StaggeredMenuItemContent = createContext({
   index: 0,
   panelStartTime: 0,
-})
-
+});
 
 export interface StaggeredMenuItemProps {
   label: string;
@@ -257,14 +262,19 @@ export function StaggeredMenuItem(props: StaggeredMenuItemProps) {
     if (scope.current) {
       const delay = (panelStartTime + 0.3 + index * 0.6) * 1000;
       const timeout = setTimeout(() => {
-        animate(scope.current, { '--sm-num-opacity': 1 }, {
-          duration: 0.4,
-          ease: [0.16, 1, 0.3, 1],
-        });
+        animate(
+          scope.current,
+          { '--sm-num-opacity': 1 },
+          {
+            duration: 0.4,
+            ease: [0.16, 1, 0.3, 1],
+          },
+        );
       }, delay);
       return () => {
         clearTimeout(timeout);
         if (scope.current) {
+          // eslint-disable-next-line react-hooks/exhaustive-deps
           scope.current.style.setProperty('--sm-num-opacity', '0');
         }
       };
@@ -287,9 +297,7 @@ export function StaggeredMenuItem(props: StaggeredMenuItemProps) {
           className="sm-panel-item relative inline-block cursor-pointer pr-[1.4em] text-6xl leading-none font-semibold tracking-[-2px] text-black uppercase no-underline transition-colors duration-150 ease-linear hover:text-(--sm-accent,#ff0000)"
           href={link}
         >
-          <motion.span
-            className="sm-panel-itemLabel w-fit inline-block origin-[50%_100%] will-change-transform"
-          >
+          <motion.span className="sm-panel-itemLabel inline-block w-fit origin-[50%_100%] will-change-transform">
             {label}
           </motion.span>
         </Link>
@@ -298,13 +306,10 @@ export function StaggeredMenuItem(props: StaggeredMenuItemProps) {
   );
 }
 
-
 const StaggeredSocialItemContent = createContext({
   socialsStartTime: 0,
   index: 0,
-})
-
-
+});
 
 export interface StaggeredMenuSocialItemProps {
   label: string;
@@ -349,7 +354,7 @@ export function StaggeredSocialItem(props: StaggeredMenuSocialItemProps) {
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="sm-socials-link relative inline-block py-[2px] text-[1.2rem] font-medium text-[#111] no-underline transition-[color,opacity] duration-300 ease-linear hover:text-(--sm-accent,#ff0000) focus-visible:outline-2 focus-visible:outline-(--sm-accent,#ff0000) focus-visible:outline-offset-[3px]"
+        className="sm-socials-link relative inline-block py-[2px] text-[1.2rem] font-medium text-[#111] no-underline transition-[color,opacity] duration-300 ease-linear hover:text-(--sm-accent,#ff0000) focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-(--sm-accent,#ff0000)"
       >
         {label}
       </Link>

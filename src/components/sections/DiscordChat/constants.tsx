@@ -1,5 +1,4 @@
-import { DiscordColors, Message, MentionMessageData, User } from './types';
-import EventCard from './EventCard';
+import { DiscordColors, Message, User } from './types';
 
 export const users: Record<string, User> = {
   reno: { id: 'reno', name: 'Reno', avatar: '/avatars/reno_cropped.webp' },

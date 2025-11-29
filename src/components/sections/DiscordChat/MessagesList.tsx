@@ -20,8 +20,8 @@ const MessagesList: FC<MessagesListProps> = ({
   onOpenModal,
 }) => {
   const [visibleMessages, setVisibleMessages] = useState(0);
-  const [isTyping, setIsTyping] = useState(false);
-  const [typingUsers, setTypingUsers] = useState<{ name: string; avatar: string }[]>([]);
+  const [, setIsTyping] = useState(false);
+  const [, setTypingUsers] = useState<{ name: string; avatar: string }[]>([]);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   const animationAbortRef = useRef(false);
@@ -48,7 +48,7 @@ const MessagesList: FC<MessagesListProps> = ({
     animationAbortRef.current = false;
 
     const cancelCheck = () => animationAbortRef.current;
-    const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
+    const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
     // Si reduce motion: mostrar todo inmediatamente
     if (prefersReducedMotion) {
@@ -121,7 +121,7 @@ const MessagesList: FC<MessagesListProps> = ({
 
         const typingDelay = userHasTyped
           ? Math.max(300, typingTime * 0.3)
-          : typingTime + (Math.random() * 200);
+          : typingTime + Math.random() * 200;
 
         await sleep(typingDelay);
 
@@ -133,7 +133,7 @@ const MessagesList: FC<MessagesListProps> = ({
         onTypingUsersChange([]);
       }
 
-      setVisibleMessages(prev => prev + 1);
+      setVisibleMessages((prev) => prev + 1);
 
       // Delay después de mostrar el mensaje
       let msgDelay = userHasTyped ? 300 : 400 + Math.random() * 300;
@@ -159,7 +159,14 @@ const MessagesList: FC<MessagesListProps> = ({
     if (!cancelCheck()) {
       onAnimationFinished(true);
     }
-  }, [enableAnimations, prefersReducedMotion, userHasTyped, onTypingChange, onTypingUsersChange, onAnimationFinished]);
+  }, [
+    enableAnimations,
+    prefersReducedMotion,
+    userHasTyped,
+    onTypingChange,
+    onTypingUsersChange,
+    onAnimationFinished,
+  ]);
 
   // Lanzar la animación solo cuando enableAnimations cambia / monta
   useEffect(() => {
@@ -237,7 +244,9 @@ const MessagesList: FC<MessagesListProps> = ({
           <div
             key={'id' in message ? message.id : `statement-${index}`}
             className={`message-item ${
-              !prefersReducedMotion && enableAnimations && isLast ? 'message-item--new' : ''
+              !prefersReducedMotion && enableAnimations && isLast
+                ? 'message-item--new'
+                : ''
             }`}
           >
             <ChannelMessage
@@ -246,7 +255,9 @@ const MessagesList: FC<MessagesListProps> = ({
               content={'content' in message ? message.content : undefined}
               hasMention={'hasMention' in message ? message.hasMention : false}
               isBot={'isBot' in message ? message.isBot : false}
-              isStatement={'isStatement' in message ? message.isStatement : false}
+              isStatement={
+                'isStatement' in message ? message.isStatement : false
+              }
               action={'action' in message ? message.action : undefined}
               avatar={avatar}
               onOpenModal={onOpenModal}

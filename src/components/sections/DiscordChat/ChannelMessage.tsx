@@ -16,22 +16,22 @@ const ChannelMessage: FC<ChannelMessageProps> = ({
 }) => {
   if (isStatement) {
     return (
-      <div className="message-item flex items-start p-1 px-4 mr-1">
-        <div className="w-10 h-10 rounded-full bg-[#2f3136] overflow-hidden">
+      <div className="message-item mr-1 flex items-start p-1 px-4">
+        <div className="h-10 w-10 overflow-hidden rounded-full bg-[#2f3136]">
           {avatar && (
-            <Image 
-              src={avatar} 
-              alt={author} 
-              width={40} 
-              height={40} 
-              className="w-full h-full object-cover" 
+            <Image
+              src={avatar}
+              alt={author}
+              width={40}
+              height={40}
+              className="h-full w-full object-cover"
             />
           )}
         </div>
-        <div className="min-h-10 flex-1 flex flex-col ml-4">
-          <time className="text-[#72767d] text-xs leading-tight">{date}</time>
-          <div className="text-left text-base text-[#CED1D3] leading-snug">
-            <strong className="text-white font-bold">{author}</strong>
+        <div className="ml-4 flex min-h-10 flex-1 flex-col">
+          <time className="text-xs leading-tight text-[#72767d]">{date}</time>
+          <div className="text-left text-base leading-snug text-[#CED1D3]">
+            <strong className="font-bold text-white">{author}</strong>
             <span className="ml-1">{action}</span>
           </div>
         </div>
@@ -39,40 +39,47 @@ const ChannelMessage: FC<ChannelMessageProps> = ({
     );
   }
 
-  // Detectar si es un mensaje con contenido especial (como la card de evento)
-  const hasSpecialContent = typeof content === 'object' && content !== null;
-  
   return (
-    <div className={`message-item flex items-start p-1 px-4 mr-1 ${
-      hasMention 
-        ? 'bg-[rgba(250,245,171,0.1)] border-l-2 border-[#faf5ab] pl-3.5' 
-        : 'bg-transparent pl-4'
-    }`}>
-      <div className={`w-10 h-10 rounded-full overflow-hidden ${
-        isBot ? 'bg-[#faf5ab]' : 'bg-[#2f3136]'
-      }`}>
+    <div
+      className={`message-item mr-1 flex items-start p-1 px-4 ${
+        hasMention
+          ? 'border-l-2 border-[#faf5ab] bg-[rgba(250,245,171,0.1)] pl-3.5'
+          : 'bg-transparent pl-4'
+      }`}
+    >
+      <div
+        className={`h-10 w-10 overflow-hidden rounded-full ${
+          isBot ? 'bg-[#faf5ab]' : 'bg-[#2f3136]'
+        }`}
+      >
         {avatar && (
-          <Image 
-            src={avatar} 
-            alt={author} 
-            width={40} 
-            height={40} 
-            className="w-full h-full object-cover" 
+          <Image
+            src={avatar}
+            alt={author}
+            width={40}
+            height={40}
+            className="h-full w-full object-cover"
           />
         )}
       </div>
-      <div className="min-h-10 flex-1 flex flex-col justify-between ml-4">
+      <div className="ml-4 flex min-h-10 flex-1 flex-col justify-between">
         <div className="flex items-center">
-          <strong className="text-white text-base font-bold m-0">{author}</strong>
+          <strong className="m-0 text-base font-bold text-white">
+            {author}
+          </strong>
           {isBot && (
-            <span className="ml-1.5 bg-[#7289da] text-white rounded px-1 py-1 uppercase font-bold text-xs">
+            <span className="ml-1.5 rounded bg-[#7289da] px-1 py-1 text-xs font-bold text-white uppercase">
               Bot
             </span>
           )}
-          <time className="ml-1.5 text-[#72767d] text-xs">{date}</time>
+          <time className="ml-1.5 text-xs text-[#72767d]">{date}</time>
         </div>
         <div className="text-left text-base text-white">
-          {content === 'EVENT_CARD' ? <EventCard onOpenModal={onOpenModal} /> : content}
+          {content === 'EVENT_CARD' ? (
+            <EventCard onOpenModal={onOpenModal} />
+          ) : (
+            content
+          )}
         </div>
       </div>
     </div>
