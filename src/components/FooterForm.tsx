@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export function FooterForm() {
+export default function FooterForm() {
   return (
     <div className="flex w-full flex-col gap-6">
       <h1 className="text-6xl">Update Indies</h1>
