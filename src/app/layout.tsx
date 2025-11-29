@@ -1,8 +1,36 @@
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/sections/Navbar';
 import Footer from '@/components/sections/Footer';
 import Image from 'next/image';
+
+const atkinsonHyperlegible = localFont({
+  src: [
+    {
+      path: '../assets/fonts/AtkinsonHyperlegible-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/AtkinsonHyperlegible-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/AtkinsonHyperlegible-Italic.ttf',
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: '../assets/fonts/AtkinsonHyperlegible-BoldItalic.ttf',
+      weight: '700',
+      style: 'italic',
+    },
+  ],
+  variable: '--font-atkinson-hyperlegible',
+  display: 'swap',
+});
 
 // SEO Configuration - Edit these values as needed
 const siteConfig = {
@@ -77,12 +105,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es" className={`dark ${atkinsonHyperlegible.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/gatito-indies.ico" />
-        {/* Preload critical images for faster LCP */}
-        <link rel="preload" href="/indies-crowd.webp" as="image" />
-        <link rel="preload" href="/indies-crowd-depth.webp" as="image" />
       </head>
       <body className="bg-background text-foreground relative">
         <div className="absolute top-0 z-[-2] mx-auto h-[70dvh] w-full">
