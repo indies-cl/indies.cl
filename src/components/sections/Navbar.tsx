@@ -1,7 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { StaggeredMenu, StaggeredMenuItem, StaggeredMenuRoot, StaggeredMenuTrigger, StaggeredSocialItem } from '@/components/StaggeredMenu';
+import {
+  StaggeredMenu,
+  StaggeredMenuItem,
+  StaggeredMenuRoot,
+  StaggeredMenuTrigger,
+  StaggeredSocialItem,
+} from '@/components/StaggeredMenu';
 
 const menuItems = [
   {
@@ -42,7 +48,6 @@ const socialItems = [
 ] as const;
 
 export default function Navbar() {
-
   return (
     <StaggeredMenuRoot>
       <header className="w-full">
@@ -59,9 +64,7 @@ export default function Navbar() {
             <button className="cursor-pointer gap-2 bg-white p-3 hover:bg-neutral-100">
               <DiscordIcon />
             </button>
-            <StaggeredMenuTrigger
-              className="bg-dark cursor-pointer gap-2 p-3 hover:bg-neutral-900"
-            >
+            <StaggeredMenuTrigger className="bg-dark cursor-pointer gap-2 p-3 hover:bg-neutral-900">
               <MenuIcon />
             </StaggeredMenuTrigger>
           </div>
@@ -70,7 +73,13 @@ export default function Navbar() {
       <div className="pointer-events-none fixed inset-0 z-50">
         <StaggeredMenu
           items={menuItems.map((item) => (
-            <StaggeredMenuItem key={item.label} {...item} className={item.label === "Código de Conducta" ? "w-[402px]" : undefined} />
+            <StaggeredMenuItem
+              key={item.label}
+              {...item}
+              className={
+                item.label === 'Código de Conducta' ? 'w-[402px]' : undefined
+              }
+            />
           ))}
           socialItems={socialItems.map((item) => (
             <StaggeredSocialItem key={item.label} {...item} />
@@ -80,7 +89,6 @@ export default function Navbar() {
     </StaggeredMenuRoot>
   );
 }
-
 
 function DiscordIcon() {
   return (
@@ -96,7 +104,7 @@ function DiscordIcon() {
         fill="#FF4F18"
       />
     </svg>
-  )
+  );
 }
 
 function MenuIcon() {
@@ -113,5 +121,5 @@ function MenuIcon() {
         fill="#F2F4F7"
       />
     </svg>
-  )
+  );
 }

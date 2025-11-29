@@ -16,8 +16,8 @@ export default function Footer() {
               <li>Journey</li>
               <li>FAQ memes</li>
               <li>
-                <Link 
-                  href="/codigo-de-conducta" 
+                <Link
+                  href="/codigo-de-conducta"
                   className="hover:text-branding-400 transition-colors"
                 >
                   Código de Conducta

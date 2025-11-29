@@ -9,7 +9,7 @@ export async function GET() {
       'https://discord.com/api/invites/indies?with_counts=true',
       {
         next: { revalidate: 86400 }, // 24 horas
-      }
+      },
     );
 
     if (!response.ok) {
@@ -23,9 +23,10 @@ export async function GET() {
       { memberCount },
       {
         headers: {
-          'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=43200',
+          'Cache-Control':
+            'public, s-maxage=86400, stale-while-revalidate=43200',
         },
-      }
+      },
     );
   } catch (error) {
     console.error('Error fetching Discord members:', error);
@@ -37,7 +38,7 @@ export async function GET() {
         headers: {
           'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800',
         },
-      }
+      },
     );
   }
 }

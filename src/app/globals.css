@@ -1,8 +1,7 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
-
 
 :root {
   --branding-orange-600: #f02e06;
@@ -81,10 +80,11 @@
   --color-dark: var(--base-black);
   --color-white: var(--base-white);
 
-  --font-sans: var(--font-atkinson-hyperlegible), ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-atkinson-hyperlegible), ui-sans-serif, system-ui, sans-serif;
   --font-mono:
-    var(--font-atkinson-hyperlegible), ui-monospace, 'Cascadia Code', 'Source Code Pro',
-    Menlo, 'DejaVu Sans Mono', monospace;
+    var(--font-atkinson-hyperlegible), ui-monospace, 'Cascadia Code',
+    'Source Code Pro', Menlo, 'DejaVu Sans Mono', monospace;
 }
 
 body {

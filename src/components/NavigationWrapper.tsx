@@ -5,7 +5,7 @@ import {
   StaggeredMenuRoot,
   StaggeredMenuTrigger,
   StaggeredMenuItem,
-  StaggeredSocialItem
+  StaggeredSocialItem,
 } from '@/components/StaggeredMenu';
 
 export default function NavigationWrapper() {
@@ -23,8 +23,12 @@ export default function NavigationWrapper() {
   ];
 
   return (
-    <StaggeredMenuRoot onOpenChange={(open: boolean) => open ? console.log('Menu opened') : console.log('Menu closed')}>
-      <StaggeredMenuTrigger className="fixed top-4 right-4 z-50 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors">
+    <StaggeredMenuRoot
+      onOpenChange={(open: boolean) =>
+        open ? console.log('Menu opened') : console.log('Menu closed')
+      }
+    >
+      <StaggeredMenuTrigger className="fixed top-4 right-4 z-50 rounded-full bg-white p-2 shadow-md transition-colors hover:bg-gray-100">
         <MenuIcon color="#000" />
       </StaggeredMenuTrigger>
 
@@ -44,12 +48,36 @@ export default function NavigationWrapper() {
   );
 }
 
-function MenuIcon({ color = "currentColor" }: { color?: string }) {
+function MenuIcon({ color = 'currentColor' }: { color?: string }) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 12H21" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M3 6H21" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M3 18H21" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3 12H21"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3 6H21"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3 18H21"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

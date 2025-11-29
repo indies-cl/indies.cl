@@ -8,7 +8,7 @@ async function getDiscordMemberCount(): Promise<number> {
       'https://discord.com/api/invites/indies?with_counts=true',
       {
         next: { revalidate: 86400 }, // Cache por 24 horas
-      }
+      },
     );
 
     if (!response.ok) {
@@ -42,9 +42,9 @@ export default async function AboutIndies() {
         <br />
         <br />
         <br />
-        indies.cl no busca lucrar. creamos comunidad para conocernos,
-        compartir ideas y construir con otros en la misma onda. todo lo
-        levantan voluntarios y siempre buscamos manos que quieran sumarse.
+        indies.cl no busca lucrar. creamos comunidad para conocernos, compartir
+        ideas y construir con otros en la misma onda. todo lo levantan
+        voluntarios y siempre buscamos manos que quieran sumarse.
         <br />
         <br />
         <br />

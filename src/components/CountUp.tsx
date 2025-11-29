@@ -47,7 +47,7 @@ export default function CountUp({
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (elementRef.current) {
@@ -76,7 +76,9 @@ export default function CountUp({
       const progress = Math.min(elapsed / duration, 1);
 
       // Animación lineal (sin easing)
-      const currentCount = Math.floor(startValue + (end - startValue) * progress);
+      const currentCount = Math.floor(
+        startValue + (end - startValue) * progress,
+      );
 
       setCount(currentCount);
 

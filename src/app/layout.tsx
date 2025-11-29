@@ -105,7 +105,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`dark ${atkinsonHyperlegible.variable}`} suppressHydrationWarning>
+    <html
+      lang="es"
+      className={`dark ${atkinsonHyperlegible.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="icon" href="/gatito-indies.ico" />
       </head>
