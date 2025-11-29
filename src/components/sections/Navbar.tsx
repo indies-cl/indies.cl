@@ -55,38 +55,18 @@ export default function Navbar() {
               <h1 className="text-xl text-white">indies.cl</h1>
             </Link>
           </div>
-
-          {/* Desktop navigation */}
-          <div className="hidden items-center gap-8 md:flex">
-            {menuItems.map((item, index) => (
-              <Link
-                key={index}
-                href={item.link}
-                className="font-medium text-white transition-colors duration-200 hover:text-[#FF4F18]"
-                aria-label={item.ariaLabel}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <button className="cursor-pointer gap-2 bg-white p-3 hover:bg-neutral-100">
-              <DiscordIcon />
-            </button>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="flex gap-2 md:hidden">
+          <div className="flex gap-2">
             <button className="cursor-pointer gap-2 bg-white p-3 hover:bg-neutral-100">
               <DiscordIcon />
             </button>
             <StaggeredMenuTrigger
               className="bg-dark cursor-pointer gap-2 p-3 hover:bg-neutral-900"
-              >
+            >
               <MenuIcon />
             </StaggeredMenuTrigger>
           </div>
         </nav>
       </header>
-
       <div className="pointer-events-none fixed inset-0 z-50">
         <StaggeredMenu
           items={menuItems.map((item) => (

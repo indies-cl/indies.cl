@@ -4,32 +4,51 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { motion, AnimatePresence, useAnimate } from 'motion/react';
 
 
-export interface StaggeredMenuProps {
-  items: React.ReactNode[];
-  socialItems: React.ReactNode[];
+export type MenuItems = {
+  label: string;
+  link: string;
+  ariaLabel?: string;
+} & React.ReactNode
+
+export type SocialItems = {
+  label: string;
+  link: string;
 }
 
-const COLORS = ['#FF4F18', '#000000', '#1a1a1a']
+export interface StaggeredMenuProps {
+  items: React.ReactNode[];
+  socialItems?: React.ReactNode[];
+  colors?: string[];
+  accentColor?: string;
+  position?: 'left' | 'right';
+  displayItemNumbering?: boolean;
+}
+
+const DEFAULT_COLORS = ['#FF4F18', '#000000', '#1a1a1a'];
 
 export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   items = [],
   socialItems = [],
+  colors = DEFAULT_COLORS,
+  accentColor = '#FF4F18',
+  position = 'right',
+  displayItemNumbering = true,
 }: StaggeredMenuProps) => {
   // Calculate layer count for timing
-  const layerCount = COLORS.length;
+  const layerCount = colors.length;
   const panelStartTime = layerCount * 0.05;
   const socialsStartTime = panelStartTime + 0.25 + items.length * 0.4;
 
   // PreLayer variants
   const preLayerVariants = {
     initial: {
-      x: '100%',
+      x: position === 'left' ? '-100%' : '100%',
     },
     animate: {
       x: '0%',
     },
     exit: {
-      x: '100%',
+      x: position === 'left' ? '-100%' : '100%',
       transition: {
         duration: 0.4,
         ease: [0.4, 0, 0.2, 1] as const, // power2.in
@@ -42,6 +61,22 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     ease: [0.16, 1, 0.3, 1] as const, // power3.out
   };
 
+  const panelVariants = {
+    initial: {
+      x: position === 'left' ? '-100%' : '100%',
+    },
+    animate: {
+      x: '0%',
+    },
+    exit: {
+      x: position === 'left' ? '-100%' : '100%',
+      transition: {
+        duration: 0.4,
+        ease: [0.4, 0, 0.2, 1] as const, // power2.in
+      },
+    },
+  };
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0" />
@@ -49,13 +84,13 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <Dialog.Content
           forceMount
           key="content"
-          className="fixed grid right-0 inset-y-0 max-w-lvw w-full sm:w-124 z-50"
-          style={{ '--sm-accent': '#FF4F18' } as React.CSSProperties}
+          className={`fixed grid ${position === 'left' ? 'left-0' : 'right-0'} inset-y-0 max-w-lvw w-full sm:w-124 z-50`}
+          style={{ '--sm-accent': accentColor } as React.CSSProperties}
         >
 
           <Dialog.Title className="sr-only">Menu</Dialog.Title>
           <div className="pointer-events-none z-5 col-start-1 row-start-1 size-full" aria-hidden="true">
-            {COLORS.map((c, i) => (
+            {colors.map((c, i) => (
               <motion.div
                 key={i}
                 className="sm-prelayer absolute inset-0"
@@ -78,19 +113,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             style={{
               WebkitBackdropFilter: 'blur(12px)',
             }}
-            initial={{
-              x: '100%',
-            }}
-            animate={{
-              x: '0%',
-            }}
-            exit={{
-              x: '100%',
-              transition: {
-                duration: 0.4,
-                ease: [0.4, 0, 0.2, 1], // power2.in
-              },
-            }}
+            variants={panelVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             transition={{
               duration: 0.6,
               ease: [0.16, 1, 0.3, 1], // power3.out
@@ -101,7 +127,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               <motion.ul
                 className="sm-panel-list m-0 flex list-none flex-col gap-2 p-0"
                 role="list"
-                data-numbering
+                data-numbering={displayItemNumbering ? "" : undefined}
                 initial={false}
               >
                 {items.map((item, index) => (
@@ -168,9 +194,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   );
 };
 
-export function StaggeredMenuRoot({ children }: { children: React.ReactNode }) {
+export function StaggeredMenuRoot({ children, ...props }: ComponentProps<typeof Dialog.Root>) {
   return (
-    <Dialog.Root>
+    <Dialog.Root {...props}>
       {children}
     </Dialog.Root>
   );

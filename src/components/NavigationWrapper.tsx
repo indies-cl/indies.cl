@@ -1,6 +1,12 @@
 'use client';
 
-import { StaggeredMenu } from '@/components/StaggeredMenu';
+import {
+  StaggeredMenu,
+  StaggeredMenuRoot,
+  StaggeredMenuTrigger,
+  StaggeredMenuItem,
+  StaggeredSocialItem
+} from '@/components/StaggeredMenu';
 
 export default function NavigationWrapper() {
   const menuItems = [
@@ -17,21 +23,33 @@ export default function NavigationWrapper() {
   ];
 
   return (
-    <StaggeredMenu
-      position="right"
-      items={menuItems}
-      socialItems={socialItems}
-      displaySocials={true}
-      displayItemNumbering={true}
-      menuButtonColor="#fff"
-      openMenuButtonColor="#fff"
-      changeMenuColorOnOpen={true}
-      colors={['#B19EEF', '#5227FF']}
-      logoUrl="/logo.svg"
-      accentColor="#ff6b6b"
-      onMenuOpen={() => console.log('Menu opened')}
-      onMenuClose={() => console.log('Menu closed')}
-      isFixed
-    />
+    <StaggeredMenuRoot onOpenChange={(open: boolean) => open ? console.log('Menu opened') : console.log('Menu closed')}>
+      <StaggeredMenuTrigger className="fixed top-4 right-4 z-50 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors">
+        <MenuIcon color="#000" />
+      </StaggeredMenuTrigger>
+
+      <StaggeredMenu
+        position="right"
+        items={menuItems.map((item, idx) => (
+          <StaggeredMenuItem key={idx} {...item} />
+        ))}
+        socialItems={socialItems.map((item, idx) => (
+          <StaggeredSocialItem key={idx} {...item} />
+        ))}
+        displayItemNumbering={true}
+        colors={['#B19EEF', '#5227FF']}
+        accentColor="#ff6b6b"
+      />
+    </StaggeredMenuRoot>
+  );
+}
+
+function MenuIcon({ color = "currentColor" }: { color?: string }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 12H21" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 6H21" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 18H21" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
