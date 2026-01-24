@@ -1,7 +1,15 @@
+import HeroSection from '@/components/sections/HeroSection';
+import AboutIndies from '@/components/sections/AboutIndies';
+import CommunitySection from '@/components/sections/CommunitySection';
+import SponsorsSection from '@/components/sections/SponsorsSection';
+
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1>Indies</h1>
-    </div>
+    <main className="">
+      <HeroSection />
+      <AboutIndies />
+      <CommunitySection />
+      <SponsorsSection />
+    </main>
   );
 }
